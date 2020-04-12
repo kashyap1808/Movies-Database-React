@@ -1,0 +1,29 @@
+name: React build
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: node setup
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: install
+        run: npm install
+
+      - name: build & deploy
+        run: |
+          git config --global user.email "mananjoshi1995@gmail.com"
+          git config --global user.name "manan30"
+          git remote set-url origin https://${{ secrets.ACCESS_TOKEN }}@github.com/manan30/movies-db.git
+          npm run deploy
+        env:
+          CI: false
